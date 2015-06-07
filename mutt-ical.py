@@ -41,6 +41,15 @@ def set_accept_state(attendees, state):
             del_if_present(attendee.params,i)
     return attendees
 
+def send_anyway():
+    while True:
+        sys.stdout.write("\nSend Anyway? [Y/n]")
+        ans = sys.stdin.readline()
+        if ans.lower() == 'y\n' or ans == '\n':
+            return 'REPLY'
+        elif ans.lower() == 'n\n':
+            return 'IGNORE'
+
 def get_accept_decline():
     while True:
         sys.stdout.write("\nAccept Invitation? [Y/n/t]")
@@ -193,7 +202,9 @@ if __name__=="__main__":
                 flag = 0
     if flag:
         sys.stderr.write("Seems like you have not been invited to this event!\n")
-        sys.exit(1)
+        answer = send_anyway()
+        if answer == "IGNORE":
+            sys.exit(-1)
 
     icsfile, tempdir = write_to_tempfile(ans)
 
